@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="./styles.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- Header -->
+    <div>
+        <nav class="navbar navbar-dark bg-dark d-flex justify-content-center nav">
+            Museo
+        </nav>
+    </div>
+    <!-- Filters -->
+    <div class="container mt-5">
+        <form id="form">
+            <div class="mb-3">
+                <label for="departmentSelect" class="form-label">Buscar por Departamento:</label>
+                <select class="form-control" id="departmentSelect">
+                    <!-- Puedes agregar más opciones aquí -->
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="locationInput" class="form-label">Buscar por Localización:</label>
+                <input type="text" class="form-control " id="locationInput" placeholder="Introduce la localización">
+            </div>
+            <div class="mb-3">
+                <label for="keywordInput" class="form-label">Buscar por Palabra Clave:</label>
+                <input type="text" class="form-control" id="keywordInput" placeholder="Introduce la palabra clave">
+            </div>
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
+    </div>
+
+    <!-- Spinner de espera -->
+    <div id="spinner" class="spinner-border text-primary position-fixed start-50 " role="status" style="display: none;">
+        <span class="visually-hidden">Cargando...</span>
+    </div>
+
+    <!-- Cards de museos -->
+    <div class="container mt-4" >
+        <div id="gallery" class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            <!-- Aquí se insertarán las cards dinámicamente -->
+        </div>
+    </div>
+
+    <script type="module" src="./index.js"></script>
+</body>
+
+</html>
