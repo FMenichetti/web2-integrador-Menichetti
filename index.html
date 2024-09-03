@@ -21,20 +21,39 @@
     <div class="container mt-5">
         <form id="form">
             <div class="mb-3">
-                <label for="departmentSelect" class="form-label">Buscar por Departamento:</label>
-                <select class="form-control" id="departmentSelect">
+                <label class="form-label ">Seleccionar Filtro:</label>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="filterType" id="filtroIndividual" value="nested" checked>
+                    <label class="form-check-label" for="filtroIndividual">
+                        Filtro individual
+                    </label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="filterType" id="filtroAnidado" value="individual">
+                    <label class="form-check-label" for="filtroAnidado">
+                        Filtro Anidado
+                    </label>
+                </div>
+            </div>
+            <div class="mb-3 d-flex align-items-center">
+                <label for="departmentSelect" class="form-label me-2">Buscar por Departamento:</label>
+                <select class="form-control me-2" id="departmentSelect">
+                    <option value="OpcionVacio">Seleccionar</option>
                     <!-- Puedes agregar más opciones aquí -->
                 </select>
+                <button type="button" class="btn btn-primary" id="btnBuscarDepto">Buscar</button>
             </div>
-            <div class="mb-3">
-                <label for="locationInput" class="form-label">Buscar por Localización:</label>
-                <input type="text" class="form-control " id="locationInput" placeholder="Introduce la localización">
+            <div class="mb-3 d-flex align-items-center">
+                <label for="locationInput" class="form-label me-2">Buscar por Localización:</label>
+                <input type="text" class="form-control me-2" id="locationInput" placeholder="Introduce la localización">
+                <button type="button" class="btn btn-primary" id="btnBuscarLacation">Buscar</button>
             </div>
-            <div class="mb-3">
-                <label for="keywordInput" class="form-label">Buscar por Palabra Clave:</label>
-                <input type="text" class="form-control" id="keywordInput" placeholder="Introduce la palabra clave">
-            </div>
-            <button type="submit" class="btn btn-primary">Buscar</button>
+            <div class="mb-3 d-flex align-items-center">
+                <label for="keywordInput" class="form-label me-2">Buscar por Palabra Clave:</label>
+                <input type="text" class="form-control me-2" id="keywordInput" placeholder="Introduce la palabra clave">
+                <button type="button" class="btn btn-primary" id="btnBuscarPalabra">Buscar</button>
+            </div>  
+            <button type="submit" class="btn btn-primary filter-nested" id="btnSubmit" style="display: none;" >Buscar</button>
         </form>
     </div>
 

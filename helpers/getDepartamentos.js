@@ -21,7 +21,7 @@ export const listarTodosId = async () => {
  * @param {*array de IDs} obj 
  * @returns array con objetos depsrtamentos completos
  */
-export const getObjPorId = async (obj) => {
+export const getObjPorId = async ( obj ) => {
     try {
         let deptos = [];
 
@@ -36,7 +36,7 @@ export const getObjPorId = async (obj) => {
                     deptos.push(data); // Agrego el objeto completo al array
                 }
 
-                if ( deptos.length > 40) { //limito la busqueda
+                if ( deptos.length > 10) { //limito la busqueda
                     return deptos;
                     break;
                 }
@@ -57,7 +57,7 @@ export const getObjPorId = async (obj) => {
  * @param {*num} id 
  * @returns array con objetos depsrtamentos completos
  */
-export const listarIdFiltrados = async (id) => {
+export const listarIdFiltrados = async ( id ) => {
     try {
         const url = `https://collectionapi.metmuseum.org/public/collection/v1/objects?departmentIds=${id}`;
         const respuesta = await fetch(url);

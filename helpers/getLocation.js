@@ -3,10 +3,10 @@
  * @param {recibe localizacion} localizacion 
  * @returns devulve array de objectIDs de esa localizacion
  */
-export const buscarPorLocalizacion = async (localizacion) => {
+export const buscarPorLocalizacion = async ( localizacion ) => {
 
     const data = [];
-    const url = `https://collectionapi.metmuseum.org/public/collection/v1/search?geoLocation=${localizacion}&q=flowers`;
+    const url = `https://collectionapi.metmuseum.org/public/collection/v1/search?geoLocation=${localizacion}&q=""`;
     try {
         const respuesta = await fetch(url);
         let data = await respuesta.json();
@@ -45,7 +45,7 @@ export async function obtenerDetallesObjeto( data ) {
                 museos.push(data); // Agrego el objeto completo al array
             }
 
-            if (museos.length > 40) { //limito la busqueda
+            if (museos.length > 10) { //limito la busqueda
                 return museos;
                 break;
             }

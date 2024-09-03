@@ -38,7 +38,7 @@ const getObjPorId = async (obj) => {
                     museos.push(data); // Agrego el objeto completo al array
                 }
 
-                if (museos.length > 40) { //limito la busqueda
+                if (museos.length > 10) { //limito la busqueda
                     return museos;
                     break;
                 }
