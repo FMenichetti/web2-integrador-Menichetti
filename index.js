@@ -21,23 +21,44 @@ const elijoFiltro = () => {
     }
 }
 
-const evaluarFiltros = (filtro1, filtro2, filtro3, depto, local, palabra )=>  {
+const mostrarErrorFiltrosVacios = (num) => {
+    if (num === 1) {
+        divError.style.display = 'block';
+    } else {
+        divError.style.display = 'none';
+    }
+}
+
+const mostrarSpinner = (num) => {
+    if (num === 1) {
+        spinner.style.display = 'block';
+    } else {
+        spinner.style.display = 'none';
+    }
+}
+
+const borroGaleria = () => {
+    galeria.innerHTML = '';
+}
+
+const evaluarFiltros = (filtro1, filtro2, filtro3, depto, local, palabra) => {
+    let url = '';
     if (filtro1 && filtro2 && filtro3) {
-        url = `https://collectionapi.metmuseum.org/public/collection/v1/search?geoLocation=${ local }&q=${ palabra }&DepartmentId=${ depto }`
+        return url = `https://collectionapi.metmuseum.org/public/collection/v1/search?geoLocation=${local}&q=${palabra}&DepartmentId=${depto}`
     } else if (filtro1 && filtro2 && !filtro3) {
-        url = `https://collectionapi.metmuseum.org/public/collection/v1/search?geoLocation=${ local }&q=*&DepartmentId=${ depto }`
+        return url = `https://collectionapi.metmuseum.org/public/collection/v1/search?geoLocation=${local}&q=*&DepartmentId=${depto}`
     } else if (filtro1 && !filtro2 && filtro3) {
-        url = `https://collectionapi.metmuseum.org/public/collection/v1/search?q=${ palabra }&DepartmentId=${ depto }`
+        return url = `https://collectionapi.metmuseum.org/public/collection/v1/search?q=${palabra}&DepartmentId=${depto}`
     } else if (filtro1 && !filtro2 && !filtro3) {
-       url = `https://collectionapi.metmuseum.org/public/collection/v1/objects?DepartmentId=${ depto }`
+        return url = `https://collectionapi.metmuseum.org/public/collection/v1/objects?DepartmentId=${depto}`
     } else if (!filtro1 && filtro2 && filtro3) {
-       url = `https://collectionapi.metmuseum.org/public/collection/v1/search?geoLocation=${ local }&q=${ palabra }`
+        return url = `https://collectionapi.metmuseum.org/public/collection/v1/search?geoLocation=${local}&q=${palabra}`
     } else if (!filtro1 && filtro2 && !filtro3) {
-        url = `https://collectionapi.metmuseum.org/public/collection/v1/search?geoLocation=${ local }&q=*`
+        return url = `https://collectionapi.metmuseum.org/public/collection/v1/search?geoLocation=${local}&q=*`
     } else if (!filtro1 && !filtro2 && filtro3) {
-        url = `https://collectionapi.metmuseum.org/public/collection/v1/search?q=${ palabra }`
+        return url = `https://collectionapi.metmuseum.org/public/collection/v1/search?q=${palabra}`
     } else if (!filtro1 && !filtro2 && !filtro3) {
-        //Ningun filtro seleccionado
+        return '';//Ningun filtro seleccionado
     }
 }
 
@@ -54,6 +75,12 @@ const galeria = document.getElementById('gallery');
 //rb
 const rbIndividual = document.getElementById('filtroIndividual');
 const rbAnidado = document.getElementById('filtroAnidado');
+//error
+const divError = document.getElementById('errorSeleccion');
+
+//inicio
+mostrarSpinner(0);
+mostrarErrorFiltrosVacios(0);
 
 //Carga de DDL y carga de array de dtos//ok
 (async () => {
@@ -68,14 +95,20 @@ const rbAnidado = document.getElementById('filtroAnidado');
 rbIndividual.addEventListener('change', elijoFiltro);
 rbAnidado.addEventListener('change', elijoFiltro);
 
-//Buscar por depto
+//Buscar por depto individual
 btnDepto.addEventListener('click', async () => {
 
-    galeria.innerHTML = '';
-    spinner.style.display = 'block';
+    borroGaleria();
+    mostrarSpinner(1);
+    mostrarErrorFiltrosVacios(0);
 
     const indice = document.getElementById('departmentSelect').selectedIndex;
-    let depto = await getDepartamentos.departamentos[indice-1].displayName;
+    if (indice === 0) {
+        mostrarSpinner(0);
+        mostrarErrorFiltrosVacios(1);
+        return;
+    }
+    let depto = await getDepartamentos.departamentos[indice - 1].displayName;
 
     console.log('el indice del depto seleccionado es: ' + indice);
     console.log('el nombre del depto seleccionado es: ' + depto);
@@ -88,17 +121,23 @@ btnDepto.addEventListener('click', async () => {
 
     getCard.crearCards(museosFiltradosDepto)
 
-    //Oculto spinner
-    spinner.style.display = 'none';
+    mostrarSpinner(0);
 })
 //Buscar por Location
 btnLocation.addEventListener('click', async () => {
 
-    galeria.innerHTML = '';
-    spinner.style.display = 'block';
+    borroGaleria();
+    mostrarSpinner(1);
+    mostrarErrorFiltrosVacios(0);
 
     const localizacion = document.getElementById('locationInput').value;
     let museosFiltradosLocal = [];
+
+    if (localizacion === '') {
+        mostrarErrorFiltrosVacios(1);
+        mostrarSpinner(0);
+        return;
+    }
 
     museosFiltradosLocal = await getLocation.buscarPorLocalizacion(localizacion)
     console.log(museosFiltradosLocal)
@@ -106,30 +145,36 @@ btnLocation.addEventListener('click', async () => {
     getCard.crearCards(museosFiltradosLocal)
 
     //Oculto spinner
-    spinner.style.display = 'none';
+    mostrarSpinner(0);
 })
 //Buscar por palabra
 btnPalabra.addEventListener('click', async () => {
 
-    galeria.innerHTML = '';
-    spinner.style.display = 'block';
+    borroGaleria();
+    mostrarSpinner(1);
+    mostrarErrorFiltrosVacios(0);
 
     const palabra = document.getElementById('keywordInput').value;
     let museosFiltradosPalabra = [];
+
+    if (palabra === '') {
+        mostrarErrorFiltrosVacios(1);
+        mostrarSpinner(0);
+        return;
+    }
 
     museosFiltradosPalabra = await getPalabra.getIdPorPalabra(palabra);
     console.log(museosFiltradosPalabra)
 
     getCard.crearCards(museosFiltradosPalabra)
 
-    //Oculto spinner
-    spinner.style.display = 'none';
+    mostrarSpinner(0);
 
 })
 
 
 // Agrega un evento al formulario para el submit
-btnSubmit.addEventListener('click', async (event)=> {
+btnSubmit.addEventListener('click', async (event) => {
 
     event.preventDefault();
     //Muestro spinner
@@ -143,21 +188,34 @@ btnSubmit.addEventListener('click', async (event)=> {
     let filtro2 = false;
     let filtro3 = false;
 
-    if ( indice !== 0 ) {
+    if (indice !== 0) {
         filtro1 = true;
     }
-    if ( localizacion !== '' ) {
+    if (localizacion !== '') {
         filtro2 = true;
     }
-    if ( palabra !== '' ) {
+    if (palabra !== '') {
         filtro3 = true;
     }
 
-    
-    
+    const url = evaluarFiltros(filtro1, filtro2, filtro3, indice, localizacion, palabra);
 
+    if (url === '') {
+        mostrarErrorFiltrosVacios(1);
+        mostrarSpinner(0);
+        return;
+    } else {
+        mostrarErrorFiltrosVacios(0);
+    }
 
+    const respuesta = await fetch(url);
+    const data = await respuesta.json();
 
+    let objListos = [];
+    objListos = await getDepartamentos.getObjPorId(data.objectIDs);
+    console.log(objListos)
+
+    //Todo bien hasta aca
 
 
 
@@ -190,10 +248,10 @@ btnSubmit.addEventListener('click', async (event)=> {
     // museosFiltradosPalabra = await getPalabra.getIdPorPalabra(palabra);
     // console.log(museosFiltradosPalabra)
 
-    getCard.crearCards(museosFiltradosPalabra)
+    // getCard.crearCards(museosFiltradosPalabra)
 
     //Oculto spinner
-    spinner.style.display = 'none';
+    mostrarSpinner(1);
 
 })
 

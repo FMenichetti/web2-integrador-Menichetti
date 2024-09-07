@@ -2,7 +2,7 @@
 //array de departamentos//ok
 export let departamentos = [];
 /**
- * Consulta Todos los departamentos
+ * Consulta Todos los departamentos para llenar DDL
  * @returns array de deptos
  */
 export const listarTodosId = async () => {
@@ -21,7 +21,7 @@ export const listarTodosId = async () => {
  * @param {*array de IDs} obj 
  * @returns array con objetos depsrtamentos completos
  */
-export const getObjPorId = async ( obj ) => {
+export const getObjPorId = async (obj) => {
     try {
         let deptos = [];
 
@@ -29,14 +29,22 @@ export const getObjPorId = async ( obj ) => {
         if (obj.length > 0) {
             for (let id of obj) {
                 const url = `https://collectionapi.metmuseum.org/public/collection/v1/objects/${id}`;
+
                 const respuesta = await fetch(url);
+
+                if (!respuesta.ok) {
+                    console.error(`Error al buscar el objeto con ID: ${id}. Estado: ${respuesta.status}`);
+                    continue; // Salta al siguiente ID
+                }
+
                 const data = await respuesta.json();
+
 
                 if (data.primaryImageSmall !== '') { //Si tiene imagen lo agrego
                     deptos.push(data); // Agrego el objeto completo al array
                 }
 
-                if ( deptos.length > 10) { //limito la busqueda
+                if (deptos.length > 10) { //limito la busqueda
                     return deptos;
                     break;
                 }
@@ -57,7 +65,7 @@ export const getObjPorId = async ( obj ) => {
  * @param {*num} id 
  * @returns array con objetos depsrtamentos completos
  */
-export const listarIdFiltrados = async ( id ) => {
+export const listarIdFiltrados = async (id) => {
     try {
         const url = `https://collectionapi.metmuseum.org/public/collection/v1/objects?departmentIds=${id}`;
         const respuesta = await fetch(url);
@@ -68,7 +76,7 @@ export const listarIdFiltrados = async ( id ) => {
         // const limitedObjectIDs = data.objectIDs.slice(0, 20);
 
         const deptosFiltrados = await getObjPorId(data.objectIDs);
-        return deptosFiltrados; 
+        return deptosFiltrados;
     } catch (error) {
         console.error('Error al listar los IDs filtrados:', error);
     }

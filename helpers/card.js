@@ -26,40 +26,58 @@ export function crearCards(objetos) {
         objetos.forEach(objeto => {
             // Crear el contenedor principal de la card
             const cardCol = document.createElement('div');
-            cardCol.className = 'col';
+            cardCol.className = 'col tarj';
 
             const card = document.createElement('div');
-            card.className = 'card h-100';
+            card.className = 'card h-100 tarj-body';
 
             // Crear el elemento img para la imagen de la card
             const img = document.createElement('img');
-            img.className = 'card-img-top';
-            img.src = objeto.primaryImageSmall || 'https://via.placeholder.com/150';
-            img.title = objeto.title;
+            img.className = 'card-img-top tarj';
+            img.src = objeto.primaryImage || 'https://via.placeholder.com/150';
+            img.title = objeto.objectDate || 'Fecha sin data';
 
             // Crear el cuerpo de la card
             const cardBody = document.createElement('div');
-            cardBody.className = 'card-body';
+            cardBody.className = 'card-body tarj-body';
 
             // Crear el título de la card
             const cardTitle = document.createElement('h5');
-            cardTitle.className = 'card-title';
+            cardTitle.className = 'card-title tarj-title';
             cardTitle.textContent = objeto.title;
 
             // Crear el texto para la cultura
             const cardCulture = document.createElement('p');
             cardCulture.className = 'card-text';
-            cardCulture.textContent = `Cultura: ${objeto.culture || 'N/A'}`;
+            cardCulture.textContent = `Cultura: ${objeto.culture || 'Cultura sin identificar'}`;
 
             // Crear el texto para la dinastía
             const cardDynasty = document.createElement('p');
             cardDynasty.className = 'card-text';
-            cardDynasty.textContent = `Dinastía: ${objeto.dynasty || 'N/A'}`;
+            cardDynasty.textContent = `Dinastía: ${objeto.dynasty || 'Dinastia sin especificar'}`;
+
+
 
             // Agregar los elementos al cuerpo de la card
             cardBody.appendChild(cardTitle);
             cardBody.appendChild(cardCulture);
             cardBody.appendChild(cardDynasty);
+
+            // Si hay más imágenes, agregar un botón
+            if (objeto.additionalImages && objeto.additionalImages.length > 0) {
+                const btnVerMas = document.createElement('button');
+                btnVerMas.className = 'btn btn-primary mt-2';
+                btnVerMas.textContent = 'Ver más imágenes';
+                btnVerMas.onclick = function () {
+                    // convierto obj en url Json
+                    const objetoStr = encodeURIComponent(JSON.stringify(objeto));
+
+                    // redirijo al html img-adicionales
+                    window.location.href = `../vistas/img-adicionales.html?objeto=${objetoStr}`;
+                };
+
+                cardBody.appendChild(btnVerMas);
+            }
 
             // Agregar la imagen y el cuerpo a la card
             card.appendChild(img);
